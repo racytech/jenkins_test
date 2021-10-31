@@ -4,4 +4,4 @@ from py_script import add
 
 
 result = add(3, 4)
-assert(result == 7)
+assert(result == 6)
