@@ -12,19 +12,19 @@ pipeline {
     stages {
         stage('Build') {
 
-            steps{
-                sh 'go version'
+            // steps{
+            //     sh 'go version'
+            // }
+            input {
+                message "Please enter an Erigon branch you wish to test:"
+                parameters{
+                    string(name: 'BRANCH', defaultValue: 'devel', description: 'Erigon branch name')
+                }
             }
-            // input {
-            //     message "Please enter an Erigon branch you wish to test:"
-            //     parameters{
-            //         string(name: 'BRANCH', defaultValue: 'devel', description: 'Erigon branch name')
-            //     }
-            // }
 
-            // steps {
-            //     sh './build.sh --branch=$BRANCH'
-            // }
+            steps {
+                sh './build.sh --branch=$BRANCH'
+            }
         }
 
         stage('Restart') {
