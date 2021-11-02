@@ -5,10 +5,6 @@ pipeline {
         go 'go-1.17.2'
     }
 
-    environment {
-        GO111MODULE = 'on'
-    }
-
     stages {
         stage('Build') {
 
