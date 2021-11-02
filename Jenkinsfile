@@ -2,9 +2,17 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') { 
+        stage('Build') {
+
+            input {
+                message "Please enter an Erigon branch you wish to test:"
+                parameters{
+                    string(name: 'BRANCH', defaultValue: 'devel', description: 'Erigon branch name')
+                }
+            }
+
             steps {
-                sh './build.sh'
+                sh './build.sh --branch=$BRANCH'
             }
         }
 
