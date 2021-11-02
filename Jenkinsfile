@@ -16,6 +16,13 @@ pipeline {
             }
         }
 
+        stage('Restart') {
+
+            steps{
+                sh './restart.sh' // restart erigon and rpcdaemon if they are running
+            }
+        }
+
         stage('Test') {
             steps{
                 sh './run_tests.sh'

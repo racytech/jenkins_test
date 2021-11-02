@@ -1,19 +1,10 @@
 #!/bin/sh
 
-BASE=$(pwd) 
-ERIGON_DIR=$BASE/erigon_replay
-WEB_DIR=$BASE/web
-RPCTEST_RESULTS_DIR=$WEB_DIR/rpctest_results
-RESULTS_DIR_NAME="replay$(date +%Y%m%d_%H%M%S)"
-RESULTS_DIR=$RPCTEST_RESULTS_DIR/$RESULTS_DIR_NAME
+BASE=$(pwd)
 
 ERIGONREPO="https://github.com/ledgerwatch/erigon.git"
-# BRANCH=$1
+ERIGON_DIR=$BASE/erigon_replay
 HASH="HEAD"
-
-DATADIR="/mnt/nvme/data1"
-
-RPCDAEMONPORT=8548
 
 for i in "$@"; do
     case $i in
@@ -24,4 +15,45 @@ for i in "$@"; do
     esac
 done
 
-echo "it is a build script and branch is $BRANCH"
+if [ -z "$BRANCH" ]; then 
+    echo "Expected branch name..."
+    echo "Usage: ./build.sh -b|--branch=<branch_name>"
+    exit 1
+fi
+
+# ---------- functions ----------
+checkout_branch() {
+    # $1 - repo
+    # $2 - branch
+    # $3 - tag
+    # $4 - dir
+    if [ -d "$4" ]; then
+        echo "Directory $4 exists."
+        cd $4
+        echo "Upgrading repository ..."
+        git fetch origin
+        git checkout --force "$2"
+        git pull # ?
+        git reset --hard "$3"
+        cd ..
+    else
+        echo "Creating new repository in $4..."
+        mkdir $4
+        cd $4
+        git init .
+        git remote add origin "$1"
+        git fetch origin
+        git checkout --force "$2"
+        git pull # ?
+        git reset --hard "$3"
+        cd ..
+    fi
+}
+
+echo ""
+checkout_branch $ERIGONREPO $BRANCH $HASH $ERIGON_DIR
+
+cd $ERIGON_DIR
+make erigon
+make rpcdaemon
+make rpctest
