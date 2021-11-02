@@ -1,16 +1,18 @@
 #!/bin/sh
 
-pid=$(ps aux | grep ./build/bin/erigon | grep datadir | awk '{print $2}')
 
-if [ -z "$pid" ]; then
-    echo "Erigon process is not running, so not killing..."
+erigon_pid=$(ps aux | grep ./build/bin/erigon | grep datadir | awk '{print $2}')
+
+if [ -z "$erigon_pid" ]; then
+    echo "Erigon process is not running... we good to go."
 else
-    echo "Found erigon process... PID=$pid"
-    # kill $pid
+    echo "Found erigon process... PID=$erigon_pid"
+    echo "Sending SIGTERM signal to PID=$erigon_pid"
+    kill $erigon_pid
 
-    # until [ -z "$pid" ]; do
-    #     echo "Waiting for erigon to shut down..."
-    #     sleep 1
-    #     pid=$(ps aux | grep ./build/bin/erigon | grep datadir | awk '{print $2}')
-    # done
+    until [ -z "$erigon_pid" ]; do
+        echo "Waiting for erigon to shut down..."
+        sleep 1
+        erigon_pid=$(ps aux | grep ./build/bin/erigon | grep datadir | awk '{print $2}')
+    done
 fi
