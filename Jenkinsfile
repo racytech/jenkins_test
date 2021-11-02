@@ -8,9 +8,6 @@ pipeline {
     stages {
         stage('Build') {
 
-            // steps{
-            //     sh 'go version'
-            // }
             input {
                 message "Please enter an Erigon branch you wish to test:"
                 parameters{
@@ -23,10 +20,10 @@ pipeline {
             }
         }
 
-        stage('Restart') {
+        stage('Restart') { // restart erigon and rpcdaemon if they are running
 
             steps{
-                sh './restart.sh' // restart erigon and rpcdaemon if they are running
+                sh './restart.sh' 
             }
         }
 

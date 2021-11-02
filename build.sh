@@ -16,7 +16,7 @@ for i in "$@"; do
 done
 
 if [ -z "$BRANCH" ]; then 
-    echo "Expected branch name..."
+    echo "Branch name is not provided. Expected branch name. Exiting..."
     echo "Usage: ./build.sh -b|--branch=<branch_name>"
     exit 1
 fi
