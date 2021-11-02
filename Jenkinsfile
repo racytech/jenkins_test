@@ -1,19 +1,28 @@
 pipeline {
     agent any
 
+    tools {
+        go 'go-1.17.2'
+    }
+
+    environment {
+        GO111MODULE = 'on'
+    }
+
     stages {
         stage('Build') {
 
-            input {
-                message "Please enter an Erigon branch you wish to test:"
-                parameters{
-                    string(name: 'BRANCH', defaultValue: 'devel', description: 'Erigon branch name')
-                }
-            }
+            sh 'go version'
+            // input {
+            //     message "Please enter an Erigon branch you wish to test:"
+            //     parameters{
+            //         string(name: 'BRANCH', defaultValue: 'devel', description: 'Erigon branch name')
+            //     }
+            // }
 
-            steps {
-                sh './build.sh --branch=$BRANCH'
-            }
+            // steps {
+            //     sh './build.sh --branch=$BRANCH'
+            // }
         }
 
         stage('Restart') {
