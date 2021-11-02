@@ -1,20 +1,16 @@
 pipeline {
     agent any
 
-    environment {
-        MY_VAR = 'this should be printed by python script'
-    }
-
     stages {
         stage('Build') { 
             steps {
-                sh './py_script.py'
+                sh './build.sh'
             }
         }
 
         stage('Test') {
             steps{
-                sh './py_test.py'
+                sh './run_tests.sh'
             }
         }
 
