@@ -16,7 +16,7 @@ pipeline {
             }
 
             steps {
-                sh 'sudo ./build.sh --branch=$BRANCH'
+                sh './build.sh --branch=$BRANCH'
             }
         }
 
