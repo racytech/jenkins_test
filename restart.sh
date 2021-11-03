@@ -120,4 +120,4 @@ echo "----- RPCdaemon successfully started. PID=$rpcdaemon_pid -----"
 echo "----- RPCdaemon logs: $RESULTS_DIR/rpcdaemon.log -----"
 echo ""
 
-echo "$RESULTS_DIR_NAME > last_replay.txt"
+echo '$RESULTS_DIR_NAME > last_replay.txt'
