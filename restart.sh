@@ -78,6 +78,23 @@ limit_lines() {
 mkdir -p $RESULTS_DIR
 
 cd $ERIGON_DIR
-./build/bin/erigon --datadir $DATADIR --chain goerli --private.api.addr=localhost:9090
-# nohup ./build/bin/erigon --datadir $DATADIR --chain goerli --private.api.addr=localhost:9090 2>&1 | $(limit_lines "$RESULTS_DIR/erigon.log" "$RESULTS_DIR/_erigon.log" "20") &
+nohup ./build/bin/erigon --datadir $DATADIR --chain goerli --private.api.addr=localhost:9090 2>&1 | $(limit_lines "$RESULTS_DIR/erigon.log" "$RESULTS_DIR/_erigon.log" "20") &
+
+erigon_pid=""
+count=0
+until [ ! -z "$erigon_pid" ]; do
+    echo "Waiting for erigon to start..."
+    sleep 1
+    erigon_pid=$(ps aux | grep ./build/bin/erigon | grep datadir | awk '{print $2}')
+    count=`expr $count + 1`
+
+    if [ $count -gt 30 ]; then 
+        echo "Erigon for some reason can't start check the logs in $RESULTS_DIR/erigon.log"
+        echo "It took too long to start a process... exiting"
+        exit 1 # entire build fails
+    fi
+done
+
+
 # nohup ./build/bin/rpcdaemon --private.api.addr=localhost:9090 --http.port=$PORT --http.api=eth,erigon,web3,net,debug,trace,txpool --verbosity=4 --datadir "$DATADIR" 2>&1 | $(limit_lines "$RESULTS_DIR/rpcdaemon.log" "$RESULTS_DIR/_rpcdaemon.log" "20") &
+
