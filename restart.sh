@@ -13,6 +13,7 @@ LOGS_DIR="/home/kairat/erigon_logs"
 RESULTS_DIR_NAME="replay$(date +%Y%m%d_%H%M%S)"
 RESULTS_DIR=$LOGS_DIR/$RESULTS_DIR_NAME
 
+echo "Checking if erigon is running..."
 erigon_pid=$(ps aux | grep ./build/bin/erigon | grep datadir | awk '{print $2}')
 # if erigon is running send SIGTERM
 if [ -z "$erigon_pid" ]; then
@@ -23,13 +24,15 @@ else
     kill $erigon_pid
 
     until [ -z "$erigon_pid" ]; do
-        echo "Waiting for erigon to stop..."
+        echo "Waiting for Erigon to stop..."
         sleep 1
         erigon_pid=$(ps aux | grep ./build/bin/erigon | grep datadir | awk '{print $2}')
     done
+
+    echo "Erigon has stopped..."
 fi
 
-
+echo "Checking if there is process listening on reserved port: $PORT..."
 # rpcdaemon_pid=$(ps aux | grep $1 | grep $2 | awk '{print $2}')
 rpcdaemon_pid=$(lsof -n -i :$PORT | grep LISTEN | awk '{print $2}')
 # kill any process running on port reserved for rpcdaemon
@@ -44,6 +47,8 @@ if [ ! -z "$rpcdaemon_pid" ]; then
         sleep 1
         pid=$(lsof -n -i :$PORT | grep LISTEN | awk '{print $2}')
     done
+
+    echo "Process with PID=$rpcdaemon_pid stopped.."
 else
     echo "There is no process listening on reserved port $PORT (rpcdaemon port)..."
 fi
@@ -80,6 +85,7 @@ mkdir -p $RESULTS_DIR
 cd $ERIGON_DIR
 
 ### start Erigon ###
+echo "Starting Erigon..."
 nohup ./build/bin/erigon --datadir $DATADIR --chain goerli --private.api.addr=localhost:9090 2>&1 | $(limit_lines "$RESULTS_DIR/erigon.log" "$RESULTS_DIR/_erigon.log" "20") &
 
 erigon_pid=""
@@ -101,6 +107,7 @@ echo "----- Erigon successfully started. PID=$erigon_pid -----"
 echo "----- Erigon logs: $RESULTS_DIR/erigon.log -----"
 
 ### start RPCdaemon ###
+echo "Starting RPCdaemon..."
 nohup ./build/bin/rpcdaemon --private.api.addr=localhost:9090 --http.port=$PORT --http.api=eth,erigon,web3,net,debug,trace,txpool --verbosity=4 --datadir "$DATADIR" 2>&1 | $(limit_lines "$RESULTS_DIR/rpcdaemon.log" "$RESULTS_DIR/_rpcdaemon.log" "20") &
 
 rpcdaemon_pid=""
