@@ -13,7 +13,7 @@ for i in "$@"; do
         BRANCH="${i#*=}"
         shift
         ;;
-    -bid=* | --buildid=*)
+    -bid=* | --buildid=*) 
         BUILD_ID="${i#*=}"
         shift
         ;;
