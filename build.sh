@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 BASE="/home/kairat"
 
 ERIGONREPO="https://github.com/ledgerwatch/erigon.git"
