@@ -13,6 +13,10 @@ for i in "$@"; do
         BRANCH="${i#*=}"
         shift
         ;;
+    -bid=* | --buildid=*)
+        BUILD_ID="${i#*=}"
+        shift
+        ;;
     esac
 done
 
@@ -51,11 +55,13 @@ checkout_branch() {
     fi
 }
 
-echo ""
-checkout_branch $ERIGONREPO $BRANCH $HASH $ERIGON_DIR
+echo "$BUILD_ID"
 
-cd $ERIGON_DIR
+# echo ""
+# checkout_branch $ERIGONREPO $BRANCH $HASH $ERIGON_DIR
 
-make erigon
-make rpcdaemon
-make rpctest
+# cd $ERIGON_DIR
+
+# make erigon
+# make rpcdaemon
+# make rpctest

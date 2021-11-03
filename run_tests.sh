@@ -16,7 +16,18 @@ LAST_RAPLAY=$(cat last_replay.txt)
 RESULTS_DIR=$LOGS_DIR/$LAST_RAPLAY
 
 
-echo $RESULTS_DIR
+for i in "$@"; do
+    case $i in
+    -bid=* | --buildid=*)
+        BUILD_ID="${i#*=}"
+        shift
+        ;;
+    esac
+done
+
+
+echo "it is a run_test script"
+echo "$BUILD_ID"
 
 # count=0
 

@@ -8,48 +8,45 @@ pipeline {
     stages {
         stage('Build') {
 
-            // input {
-            //     message "Please enter an Erigon branch you wish to test:"
-            //     parameters{
-            //         string(name: 'BRANCH', defaultValue: 'devel', description: 'Erigon branch name')
-            //     }
-            // }
-
-            // steps {
-            //     sh './build.sh --branch=$BRANCH'
-            // }
+            input {
+                message "Please enter an Erigon branch you wish to test:"
+                parameters{
+                    string(name: 'BRANCH', defaultValue: 'devel', description: 'Erigon branch name')
+                }
+            }
 
             steps {
-                echo "Running ${env.BUILD_ID} on ${env.BUILD_NUMBER}"
+                sh './build.sh --branch=$BRANCH --buildid=${env.BUILD_ID}'
             }
+
         }
 
         stage('Restart') { // restart erigon and rpcdaemon if they are running
 
-            // steps{
-            //     sh 'sudo ./restart.sh' 
-            // }
+            steps{
+                sh 'sudo ./restart.sh --buildid=${env.BUILD_ID}' 
+            }
             steps {
                 echo "Running ${env.BUILD_ID} on ${env.BUILD_NUMBER}"
             }
         }
 
         stage('Test') {
-            // steps{
-            //     sh './run_tests.sh'
-            // }
+            steps{
+                sh './run_tests.sh --buildid=${env.BUILD_ID}'
+            }
             steps {
                 echo "Running ${env.BUILD_ID} on ${env.BUILD_NUMBER}"
             }
         }
 
         stage('Deploy') {
-            // steps{
-            //     sh './deploy.sh'
-            // }
-            steps {
-                echo "Running ${env.BUILD_ID} on ${env.BUILD_NUMBER}"
+            steps{
+                sh './deploy.sh --buildid=${env.BUILD_ID}'
             }
+            // steps {
+            //     echo "Running ${env.BUILD_ID} on ${env.BUILD_NUMBER}"
+            // }
         }
     }
 
