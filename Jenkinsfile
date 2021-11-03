@@ -33,7 +33,10 @@ pipeline {
 
         stage('Test') {
             steps{
-                sh "./run_tests.sh --buildid=${env.BUILD_ID}"
+                def date = new Date()
+                println now.format("yyMMdd_HHmmSS", TimeZone.getTimeZone('UTC'))
+
+                sh "sudo ./run_tests.sh --buildid=${env.BUILD_ID}"
             }
         }
 

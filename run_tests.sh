@@ -23,32 +23,7 @@ done
 
 RESULTS_DIR=$LOGS_DIR/$BUILD_ID 
 
-limit_lines() {
-
-    # limits redirected output lines to arg $3
-    # usage example:
-    # command_that_continuously_outputs | limit_lines "file_to_write" "file_helper" "number_of_lines_limit"
-
-    file_name=$1
-    file_out=$2
-    limit=$3
-
-    touch $file_name
-    touch $file_out
-
-    while IFS='' read -r line; do
-        line_count=$(wc -l <"$file_name")
-        if [ $line_count -gt $limit ]; then
-            sed 1d $file_name >$file_out
-            {
-                cat $file_out
-                printf '%s\n' "$line"
-            } >$file_name
-        else
-            echo $line >>$file_name
-        fi
-    done
-}
+date_time="$(date +%Y%m%d_%H%M%S)"
 
 replay_files() {
     # $1 - dir with files
@@ -84,3 +59,4 @@ replay_files() {
 }
 
 replay_files $BASE/queries $PORT
+

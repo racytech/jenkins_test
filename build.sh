@@ -59,13 +59,11 @@ checkout_branch() {
     fi
 }
 
-echo "$BUILD_ID"
+echo ""
+checkout_branch $ERIGONREPO $BRANCH $HASH $ERIGON_DIR
 
-# echo ""
-# checkout_branch $ERIGONREPO $BRANCH $HASH $ERIGON_DIR
+cd $ERIGON_DIR
 
-# cd $ERIGON_DIR
-
-# make erigon
-# make rpcdaemon
-# make rpctest
+make erigon
+make rpcdaemon
+make rpctest
