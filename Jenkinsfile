@@ -23,7 +23,7 @@ pipeline {
         stage('Restart') { // restart erigon and rpcdaemon if they are running
 
             steps{
-                sh './restart.sh' 
+                sh 'sudo ./restart.sh' 
             }
         }
 

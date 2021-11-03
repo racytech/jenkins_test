@@ -1,5 +1,6 @@
 #!/bin/sh
 
-BASE="/home/kairat"
+BASE=$(pwd)
+
 
 echo "it is a test script"

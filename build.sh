@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 
-BASE="/home/kairat"
+BASE=$(pwd)
 
 ERIGONREPO="https://github.com/ledgerwatch/erigon.git"
 ERIGON_DIR=$BASE/erigon_replay
@@ -39,7 +39,7 @@ checkout_branch() {
         cd ..
     else
         echo "Creating new repository in $4..."
-        sudo mkdir $4
+        mkdir $4
         cd $4
         git init .
         git remote add origin "$1"
