@@ -6,15 +6,7 @@ ERIGON_DIR=$BASE/erigon_replay
 
 PORT=8548 # reserved rpcdaemon port
 
-# DATADIR="/mnt/nvme/data1" # chaindata dir
-DATADIR="/mnt/rd0_0/goerli" # chaindata dir
-
 LOGS_DIR="/home/kairat/erigon_logs"
-
-LAST_RAPLAY=$(cat last_replay.txt)
-
-RESULTS_DIR=$LOGS_DIR/$LAST_RAPLAY
-
 
 for i in "$@"; do
     case $i in
@@ -29,23 +21,7 @@ for i in "$@"; do
     esac
 done
 
-
-echo "it is a run_test script"
-echo "build_id: $BUILD_ID, timestamp: $TIMESTAMP"
-
-# count=0
-
-# while true; do
-#     echo "current count: $count"
-#     sleep 1
-#     count=`expr $count + 1`
-
-#     if [ $count -ge 10 ]; then 
-#         echo "Reaced 10"
-#         exit 1
-#     fi
-# done
-# echo "current count: $count"
+RESULTS_DIR=$LOGS_DIR/$BUILD_ID 
 
 limit_lines() {
 
@@ -92,15 +68,19 @@ replay_files() {
             wait $!      # wait untill last executed process finishes
             exit_code=$? # grab the code
 
-            echo $exit_code >>$RESULTS_DIR/$eachfile
-
             tail -n 20 $temp_file >>$RESULTS_DIR/$eachfile
 
             rm $temp_file
+
+            if [ ! "$exit_code" = 0 ]; then 
+                echo "Unsuccessfull test result: for $eachfile."
+                echo "Check $RESULTS_DIR/$eachfile."
+                exit 1
+            fi
 
         done
 
     fi
 }
 
-# replay_files $BASE/queries $RPCDAEMONPORT
+replay_files $BASE/queries $PORT

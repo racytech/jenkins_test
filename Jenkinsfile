@@ -20,28 +20,28 @@ pipeline {
             }
 
             steps {
-                sh "./build.sh --branch=$BRANCH --buildid=${env.BUILD_ID} --timestamp=$now"
+                sh "./build.sh --branch=$BRANCH"
             }
 
         }
 
         stage('Restart') { // restart erigon and rpcdaemon if they are running
             steps{
-                sh "sudo ./restart.sh --buildid=${env.BUILD_ID} --timestamp=$now" 
+                sh "sudo ./restart.sh --buildid=${env.BUILD_ID}" 
             }
         }
 
         stage('Test') {
             steps{
-                sh "./run_tests.sh --buildid=${env.BUILD_ID} --timestamp=$now"
+                sh "./run_tests.sh --buildid=${env.BUILD_ID}"
             }
         }
 
-        stage('Deploy') {
-            steps{
-                sh "./deploy.sh --buildid=${env.BUILD_ID} --timestamp=$now"
-            }
-        }
+        // stage('Deploy') {
+        //     steps{
+        //         sh "./deploy.sh --buildid=${env.BUILD_ID}"
+        //     }
+        // }
     }
 
 }
