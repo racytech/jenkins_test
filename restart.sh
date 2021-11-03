@@ -78,23 +78,42 @@ limit_lines() {
 mkdir -p $RESULTS_DIR
 
 cd $ERIGON_DIR
+
+### start Erigon ###
 nohup ./build/bin/erigon --datadir $DATADIR --chain goerli --private.api.addr=localhost:9090 2>&1 | $(limit_lines "$RESULTS_DIR/erigon.log" "$RESULTS_DIR/_erigon.log" "20") &
 
 erigon_pid=""
 count=0
 until [ ! -z "$erigon_pid" ]; do
-    echo "Waiting for erigon to start..."
+    echo "Waiting for Erigon to start..."
     sleep 1
     erigon_pid=$(ps aux | grep ./build/bin/erigon | grep datadir | awk '{print $2}')
     count=`expr $count + 1`
 
     if [ $count -gt 30 ]; then 
-        echo "Erigon for some reason can't start check the logs in $RESULTS_DIR/erigon.log"
+        echo "Erigon for some reason can't start. Check the logs in $RESULTS_DIR/erigon.log"
         echo "It took too long to start a process... exiting"
         exit 1 # entire build fails
     fi
 done
+echo ""
+echo "----- Erigon successfully started. PID=$erigon_pid -----"
 
+### start RPCdaemon ###
+nohup ./build/bin/rpcdaemon --private.api.addr=localhost:9090 --http.port=$PORT --http.api=eth,erigon,web3,net,debug,trace,txpool --verbosity=4 --datadir "$DATADIR" 2>&1 | $(limit_lines "$RESULTS_DIR/rpcdaemon.log" "$RESULTS_DIR/_rpcdaemon.log" "20") &
 
-# nohup ./build/bin/rpcdaemon --private.api.addr=localhost:9090 --http.port=$PORT --http.api=eth,erigon,web3,net,debug,trace,txpool --verbosity=4 --datadir "$DATADIR" 2>&1 | $(limit_lines "$RESULTS_DIR/rpcdaemon.log" "$RESULTS_DIR/_rpcdaemon.log" "20") &
-
+rpcdaemon_pid=""
+count=0
+until [ ! -z "$rpcdaemon_pid" ]; do
+    echo "Waiting for RPCdaemon to start..."
+    sleep 1
+    rpcdaemon_pid=$(lsof -n -i :$PORT | grep LISTEN | awk '{print $2}')
+    if [ $count -gt 30 ]; then 
+        echo "RPCdaemon for some reason can't start. Check the logs in $RESULTS_DIR/rpcdaemon.log"
+        echo "It took too long to start a process... exiting"
+        exit 1 # entire build fails
+    fi
+done
+echo ""
+echo "----- RPCdaemon successfully started. PID=$rpcdaemon_pid -----"
+echo ""
