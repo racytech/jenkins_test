@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 
 
 BASE="/home/kairat"
@@ -55,6 +55,8 @@ echo ""
 checkout_branch $ERIGONREPO $BRANCH $HASH $ERIGON_DIR
 
 cd $ERIGON_DIR
-make erigon
-make rpcdaemon
-make rpctest
+
+go version
+# make erigon
+# make rpcdaemon
+# make rpctest
