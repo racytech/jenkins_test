@@ -5,6 +5,10 @@ pipeline {
         go 'go-1.17.2'
     }
 
+    environment {
+        now = currentBuild.startTimeInMillis // timestamp
+    }
+
     stages {
         stage('Build') {
 
@@ -17,7 +21,7 @@ pipeline {
 
             steps {
                 sh "./build.sh --branch=$BRANCH --buildid=${env.BUILD_ID}"
-                echo "TimeStamp: ${currentBuild.startTimeInMillis}"
+                echo "TimeStamp: $now"
             }
 
         }
@@ -25,21 +29,21 @@ pipeline {
         stage('Restart') { // restart erigon and rpcdaemon if they are running
             steps{
                 sh "sudo ./restart.sh --buildid=${env.BUILD_ID}" 
-                echo "TimeStamp: ${currentBuild.startTimeInMillis}"
+                echo "TimeStamp: $now"
             }
         }
 
         stage('Test') {
             steps{
                 sh "./run_tests.sh --buildid=${env.BUILD_ID}"
-                echo "TimeStamp: ${currentBuild.startTimeInMillis}"
+                echo "TimeStamp: $now"
             }
         }
 
         stage('Deploy') {
             steps{
                 sh "./deploy.sh --buildid=${env.BUILD_ID}"
-                echo "TimeStamp: ${currentBuild.startTimeInMillis}"
+                echo "TimeStamp: $now"
             }
         }
     }
