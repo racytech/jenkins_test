@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        now = currentBuild.startTimeInMillis // timestamp
+        now = "${currentBuild.startTimeInMillis}" // timestamp
     }
 
     stages {
