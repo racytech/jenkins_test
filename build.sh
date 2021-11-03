@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASE=$(pwd)
+BASE="/home/kairat"
 
 ERIGONREPO="https://github.com/ledgerwatch/erigon.git"
 ERIGON_DIR=$BASE/erigon_replay

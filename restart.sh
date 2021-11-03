@@ -1,6 +1,7 @@
 #!/bin/sh
 
-BASE=$(pwd)
+BASE="/home/kairat"
+
 ERIGON_DIR=$BASE/erigon_replay
 
 erigon_pid=$(ps aux | grep ./build/bin/erigon | grep datadir | awk '{print $2}')
