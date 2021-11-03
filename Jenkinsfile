@@ -22,12 +22,8 @@ pipeline {
         }
 
         stage('Restart') { // restart erigon and rpcdaemon if they are running
-
             steps{
                 sh 'sudo ./restart.sh --buildid=${env.BUILD_ID}' 
-            }
-            steps {
-                echo "Running ${env.BUILD_ID} on ${env.BUILD_NUMBER}"
             }
         }
 
@@ -35,18 +31,12 @@ pipeline {
             steps{
                 sh './run_tests.sh --buildid=${env.BUILD_ID}'
             }
-            steps {
-                echo "Running ${env.BUILD_ID} on ${env.BUILD_NUMBER}"
-            }
         }
 
         stage('Deploy') {
             steps{
                 sh './deploy.sh --buildid=${env.BUILD_ID}'
             }
-            // steps {
-            //     echo "Running ${env.BUILD_ID} on ${env.BUILD_NUMBER}"
-            // }
         }
     }
 
