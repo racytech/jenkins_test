@@ -17,6 +17,10 @@ for i in "$@"; do
         BUILD_ID="${i#*=}"
         shift
         ;;
+    -t=* | --timestamp=*) 
+        TIMESTAMP="${i#*=}"
+        shift
+        ;;
     esac
 done
 

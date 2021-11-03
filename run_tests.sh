@@ -22,12 +22,16 @@ for i in "$@"; do
         BUILD_ID="${i#*=}"
         shift
         ;;
+    -t=* | --timestamp=*) 
+        TIMESTAMP="${i#*=}"
+        shift
+        ;;
     esac
 done
 
 
 echo "it is a run_test script"
-echo "$BUILD_ID"
+echo "build_id: $BUILD_ID, timestamp: $TIMESTAMP"
 
 # count=0
 

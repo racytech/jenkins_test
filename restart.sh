@@ -19,12 +19,16 @@ for i in "$@"; do
         BUILD_ID="${i#*=}"
         shift
         ;;
+    -t=* | --timestamp=*) 
+        TIMESTAMP="${i#*=}"
+        shift
+        ;;
     esac
 done
 
 
 echo "it is a restart script"
-echo "$BUILD_ID"
+echo "build_id: $BUILD_ID, timestamp: $TIMESTAMP"
 
 
 # echo "Checking if erigon is running..."
