@@ -5,10 +5,6 @@ pipeline {
         go 'go-1.17.2'
     }
 
-    environment {
-        now = "${currentBuild.startTimeInMillis}" // timestamp
-    }
-
     stages {
         stage('Build') {
 
@@ -35,7 +31,7 @@ pipeline {
             steps{
                 script {
                     def date = new Date()
-                    println now.format("yyMMdd_HHmmSS", TimeZone.getTimeZone('UTC'))
+                    println date.format("yyMMdd_HHmmSS", TimeZone.getTimeZone('UTC'))
                 }
                 sh "sudo ./run_tests.sh --buildid=${env.BUILD_ID}"
             }
