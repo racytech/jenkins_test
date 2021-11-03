@@ -98,6 +98,7 @@ until [ ! -z "$erigon_pid" ]; do
 done
 echo ""
 echo "----- Erigon successfully started. PID=$erigon_pid -----"
+echo "----- Erigon logs: $RESULTS_DIR/erigon.log -----"
 
 ### start RPCdaemon ###
 nohup ./build/bin/rpcdaemon --private.api.addr=localhost:9090 --http.port=$PORT --http.api=eth,erigon,web3,net,debug,trace,txpool --verbosity=4 --datadir "$DATADIR" 2>&1 | $(limit_lines "$RESULTS_DIR/rpcdaemon.log" "$RESULTS_DIR/_rpcdaemon.log" "20") &
@@ -116,4 +117,7 @@ until [ ! -z "$rpcdaemon_pid" ]; do
 done
 echo ""
 echo "----- RPCdaemon successfully started. PID=$rpcdaemon_pid -----"
+echo "----- RPCdaemon logs: $RESULTS_DIR/rpcdaemon.log -----"
 echo ""
+
+echo "$RESULTS_DIR_NAME > last_replay.txt"
