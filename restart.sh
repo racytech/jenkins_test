@@ -113,7 +113,7 @@ until [ ! -z "$erigon_pid" ]; do
 
     if [ $count -gt 30 ]; then 
         echo "Erigon for some reason can't start. Check the logs in $RESULTS_DIR/erigon.log"
-        echo "It took too long to start a process... exiting"
+        echo "It took too long to start a Erigon... exiting"
         exit 1 # entire build fails
     fi
 done
@@ -136,7 +136,7 @@ until [ ! -z "$rpcdaemon_pid" ]; do
 
     if [ $count -gt 30 ]; then 
         echo "RPCdaemon for some reason can't start. Check the logs in $RESULTS_DIR/rpcdaemon.log"
-        echo "It took too long to start a process... exiting"
+        echo "It took too long to start a RPCdaemon... exiting"
         exit 1 # entire build fails
     fi
 done

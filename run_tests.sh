@@ -34,7 +34,7 @@ replay_files() {
 
         for eachfile in *.txt; do
             echo "Replaying file $eachfile"
-
+            cat $eachfile
             temp_file=$RESULTS_DIR/_temp.txt
 
             # redirect output to temp file
