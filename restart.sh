@@ -105,7 +105,7 @@ nohup ./build/bin/erigon --datadir $DATADIR --chain goerli --private.api.addr=lo
 erigon_pid=""
 count=0
 until [ ! -z "$erigon_pid" ]; do
-    echo "Waiting for Erigon to start... count: $count"
+    echo "Waiting for Erigon to start... waited: ${count}s"
     sleep 1
     erigon_pid=$(ps aux | grep ./build/bin/erigon | grep datadir | awk '{print $2}')
 
@@ -128,7 +128,7 @@ nohup ./build/bin/rpcdaemon --private.api.addr=localhost:9090 --http.port=$PORT 
 rpcdaemon_pid=""
 count=0
 until [ ! -z "$rpcdaemon_pid" ]; do
-    echo "Waiting for RPCdaemon to start... count: $count"
+    echo "Waiting for RPCdaemon to start... waited: ${count}s"
     sleep 1
     rpcdaemon_pid=$(lsof -n -i :$PORT | grep LISTEN | awk '{print $2}')
 
