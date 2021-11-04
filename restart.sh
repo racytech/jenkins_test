@@ -108,6 +108,7 @@ until [ ! -z "$erigon_pid" ]; do
     echo "Waiting for Erigon to start..."
     sleep 1
     erigon_pid=$(ps aux | grep ./build/bin/erigon | grep datadir | awk '{print $2}')
+    
     count=`expr $count + 1`
 
     if [ $count -gt 30 ]; then 
@@ -130,6 +131,9 @@ until [ ! -z "$rpcdaemon_pid" ]; do
     echo "Waiting for RPCdaemon to start..."
     sleep 1
     rpcdaemon_pid=$(lsof -n -i :$PORT | grep LISTEN | awk '{print $2}')
+
+    count=`expr $count + 1`
+
     if [ $count -gt 30 ]; then 
         echo "RPCdaemon for some reason can't start. Check the logs in $RESULTS_DIR/rpcdaemon.log"
         echo "It took too long to start a process... exiting"
